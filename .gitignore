@@ -31,3 +31,7 @@ app.*.map.json
 web/
 macos/
 linux/
+android/
+ios/
+.metadata
+pubspec.lock
