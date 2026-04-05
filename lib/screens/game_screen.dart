@@ -31,7 +31,6 @@ class _GameScreenState extends State<GameScreen>
   late AnimationController _slideCtrl;
   late Animation<Offset> _slideAnim;
 
-  // Key to force TimerWidget rebuild on each card
   int _timerKey = 0;
 
   @override
@@ -119,7 +118,6 @@ class _GameScreenState extends State<GameScreen>
     final session = widget.session;
     final settings = session.settings;
 
-    // In team mode, rotate teams after each player's allotted cards
     if (settings.mode == GameMode.team) {
       final teamCardsDone = session.results
           .where((r) => r.teamIndex == session.currentTeamIndex)
@@ -152,16 +150,14 @@ class _GameScreenState extends State<GameScreen>
     final session = widget.session;
     final settings = session.settings;
     final city = session.currentCity;
-    final total = settings.mode == GameMode.infinite
-        ? '∞'
-        : '${session.cities.length}';
+    final total =
+        settings.mode == GameMode.infinite ? '∞' : '${session.cities.length}';
     final current = session.currentIndex + 1;
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // Header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
@@ -188,8 +184,8 @@ class _GameScreenState extends State<GameScreen>
                         LinearProgressIndicator(
                           value: session.currentIndex / session.cities.length,
                           backgroundColor: const Color(0xFF1E2D3D),
-                          valueColor: const AlwaysStoppedAnimation(
-                              Color(0xFF00B4D8)),
+                          valueColor:
+                              const AlwaysStoppedAnimation(Color(0xFF00B4D8)),
                           minHeight: 4,
                           borderRadius: BorderRadius.circular(2),
                         ),
@@ -199,13 +195,12 @@ class _GameScreenState extends State<GameScreen>
                   const SizedBox(width: 12),
                   Text(
                     '$current / $total',
-                    style: const TextStyle(
-                        color: Color(0xFF607D8B), fontSize: 13),
+                    style:
+                        const TextStyle(color: Color(0xFF607D8B), fontSize: 13),
                   ),
                 ],
               ),
             ),
-
             Expanded(
               child: _phase == _Phase.pointing
                   ? _buildPointingPhase(city, settings)
@@ -225,7 +220,6 @@ class _GameScreenState extends State<GameScreen>
         child: Column(
           children: [
             const Spacer(),
-            // City card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(28),
@@ -269,8 +263,6 @@ class _GameScreenState extends State<GameScreen>
               ),
             ),
             const SizedBox(height: 28),
-
-            // Compass + instruction
             if (_compassAvailable) ...[
               LiveCompassWidget(heading: _heading, size: 140),
               const SizedBox(height: 12),
@@ -294,8 +286,6 @@ class _GameScreenState extends State<GameScreen>
               style: TextStyle(color: Color(0xFF90A4AE), fontSize: 13),
             ),
             const Spacer(),
-
-            // Bottom row: timer + confirm button
             Row(
               children: [
                 if (settings.timePerCard != null) ...[
@@ -454,8 +444,8 @@ class _GameScreenState extends State<GameScreen>
                 const SizedBox(height: 4),
                 Text(
                   '${result.city.country} • ${(result.city.population / 1e6).toStringAsFixed(1)} млн чел.',
-                  style: const TextStyle(
-                      color: Color(0xFF607D8B), fontSize: 13),
+                  style:
+                      const TextStyle(color: Color(0xFF607D8B), fontSize: 13),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -466,8 +456,7 @@ class _GameScreenState extends State<GameScreen>
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    _infoChip(
-                        Icons.navigation,
+                    _infoChip(Icons.navigation,
                         'Верное: ${result.correctBearing.toStringAsFixed(0)}°'),
                     const SizedBox(width: 8),
                     _infoChip(Icons.near_me,
@@ -488,8 +477,8 @@ class _GameScreenState extends State<GameScreen>
               icon: const Icon(Icons.arrow_forward_rounded),
               label: Text(
                 widget.session.isLastCard ? 'Итоги' : 'Следующий город',
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF00B4D8),
@@ -518,8 +507,7 @@ class _GameScreenState extends State<GameScreen>
             Icon(icon, size: 14, color: const Color(0xFF607D8B)),
             const SizedBox(width: 4),
             Text(text,
-                style:
-                    const TextStyle(color: Color(0xFF90A4AE), fontSize: 12)),
+                style: const TextStyle(color: Color(0xFF90A4AE), fontSize: 12)),
           ],
         ),
       );
@@ -530,8 +518,8 @@ class _GameScreenState extends State<GameScreen>
       builder: (_) => AlertDialog(
         backgroundColor: const Color(0xFF1E2D3D),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Выйти из игры?',
-            style: TextStyle(color: Colors.white)),
+        title:
+            const Text('Выйти из игры?', style: TextStyle(color: Colors.white)),
         content: const Text('Прогресс не сохранится.',
             style: TextStyle(color: Color(0xFF90A4AE))),
         actions: [
@@ -545,8 +533,8 @@ class _GameScreenState extends State<GameScreen>
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: const Text('Выйти',
-                style: TextStyle(color: Color(0xFFFF5252))),
+            child:
+                const Text('Выйти', style: TextStyle(color: Color(0xFFFF5252))),
           ),
         ],
       ),
