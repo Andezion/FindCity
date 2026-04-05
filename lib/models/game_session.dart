@@ -54,7 +54,6 @@ class GameSession {
 
   String get teamName => 'Команда ${currentTeamIndex + 1}';
 
-  // Cards played by current team
   int get currentTeamCardCount =>
       results.where((r) => r.teamIndex == currentTeamIndex).length;
 }
