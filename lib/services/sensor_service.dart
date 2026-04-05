@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
 
-/// Computes a tilt-compensated compass heading (0–360°, 0 = North)
-/// from accelerometer + magnetometer, without requiring flutter_compass.
 class SensorService {
   static StreamSubscription? _accelSub;
   static StreamSubscription? _magnetSub;
@@ -55,16 +53,13 @@ class SensorService {
     }
   }
 
-  /// Tilt-compensated heading using standard rotation-matrix algorithm.
   static double? _calcHeading() {
     final g = sqrt(_ax * _ax + _ay * _ay + _az * _az);
     if (g < 0.1) return null;
 
-    // Roll (rotation around x) and pitch (rotation around y)
     final roll = atan2(_ay, _az);
     final pitch = atan2(-_ax, sqrt(_ay * _ay + _az * _az));
 
-    // Tilt-compensated horizontal magnetic components
     final bxh = _mx * cos(pitch) +
         _my * sin(roll) * sin(pitch) +
         _mz * cos(roll) * sin(pitch);
