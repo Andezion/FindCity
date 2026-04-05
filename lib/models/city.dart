@@ -3,7 +3,7 @@ class City {
   final String nameEn;
   final String country;
   final String countryCode;
-  final String region; // 'europe', 'asia', 'north_america', 'south_america', 'africa', 'oceania'
+  final String region;
   final double lat;
   final double lng;
   final int population;
