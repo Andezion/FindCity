@@ -3,7 +3,6 @@ import 'dart:math';
 class GeoUtils {
   static const double earthRadiusKm = 6371.0;
 
-  /// Bearing in degrees (0 = North, clockwise)
   static double calculateBearing(
     double fromLat,
     double fromLng,
@@ -21,7 +20,6 @@ class GeoUtils {
     return (bearing + 360) % 360;
   }
 
-  /// Distance in kilometres (Haversine)
   static double calculateDistance(
     double lat1,
     double lng1,
@@ -41,7 +39,6 @@ class GeoUtils {
     return earthRadiusKm * c;
   }
 
-  /// Smallest angle between two bearings (0–180)
   static double bearingDifference(double b1, double b2) {
     double diff = ((b2 - b1) + 360) % 360;
     if (diff > 180) diff = 360 - diff;
