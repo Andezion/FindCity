@@ -12,7 +12,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 32),
-            // Logo / Title
             const Icon(Icons.explore, size: 64, color: Color(0xFF00B4D8)),
             const SizedBox(height: 12),
             const Text(
