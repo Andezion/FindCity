@@ -229,7 +229,6 @@ class _CompassPainter extends CustomPainter {
     const spacing = 6.0;
     const textStyle = TextStyle(color: Color(0xFF90A4AE), fontSize: 11);
 
-    // Correct direction legend
     canvas.drawCircle(
       Offset(16, size.height - 28),
       dotRadius,
@@ -238,7 +237,6 @@ class _CompassPainter extends CustomPainter {
     _paintText(
         canvas, 'Верное направление', Offset(26, size.height - 34), textStyle);
 
-    // User direction legend
     canvas.drawCircle(
       Offset(16, size.height - 28 + dotRadius * 2 + spacing),
       dotRadius,
