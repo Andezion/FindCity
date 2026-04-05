@@ -125,9 +125,9 @@ extension DifficultyExtension on Difficulty {
 class GameSettings {
   final GameRegion region;
   final GameMode mode;
-  final int cardCount; // for fixed/custom/cardsPerPlayer in team
-  final int teamCount; // for team mode
-  final int? timePerCard; // seconds, null = no timer
+  final int cardCount;
+  final int teamCount;
+  final int? timePerCard;
   final Difficulty difficulty;
 
   const GameSettings({
