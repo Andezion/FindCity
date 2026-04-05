@@ -93,7 +93,6 @@ class _LiveCompassPainter extends CustomPainter {
       ),
     );
 
-    // Center dot
     canvas.drawCircle(center, 4, Paint()..color = Colors.white70);
   }
 
