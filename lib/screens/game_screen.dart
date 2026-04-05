@@ -25,7 +25,7 @@ class _GameScreenState extends State<GameScreen>
     with SingleTickerProviderStateMixin {
   _Phase _phase = _Phase.pointing;
   double _heading = 0.0;
-  StreamSubscription<double?>? _compassSub;
+  StreamSubscription<double>? _compassSub;
   CardResult? _lastResult;
   bool _compassAvailable = false;
   late AnimationController _slideCtrl;
@@ -49,8 +49,9 @@ class _GameScreenState extends State<GameScreen>
 
     _compassAvailable = SensorService.isCompassAvailable;
     if (_compassAvailable) {
+      SensorService.start();
       _compassSub = SensorService.headingStream.listen((h) {
-        if (h != null && _phase == _Phase.pointing) {
+        if (_phase == _Phase.pointing) {
           setState(() => _heading = h);
         }
       });
@@ -60,6 +61,7 @@ class _GameScreenState extends State<GameScreen>
   @override
   void dispose() {
     _compassSub?.cancel();
+    SensorService.stop();
     _slideCtrl.dispose();
     super.dispose();
   }
