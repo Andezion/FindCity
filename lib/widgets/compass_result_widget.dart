@@ -50,14 +50,12 @@ class _CompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 16;
 
-    // Background circle
     canvas.drawCircle(
       center,
       radius,
       Paint()..color = const Color(0xFF1E2A3A),
     );
 
-    // Outer ring
     canvas.drawCircle(
       center,
       radius,
@@ -67,7 +65,6 @@ class _CompassPainter extends CustomPainter {
         ..strokeWidth = 2,
     );
 
-    // Tick marks
     for (int i = 0; i < 36; i++) {
       final angle = (i * 10 - 90) * pi / 180;
       final isCardinal = i % 9 == 0;
@@ -89,7 +86,6 @@ class _CompassPainter extends CustomPainter {
       );
     }
 
-    // Acceptable range arc
     final arcColor = isCorrect
         ? const Color(0xFF4CAF50).withValues(alpha: 0.35)
         : const Color(0xFFFF5252).withValues(alpha: 0.25);
@@ -104,7 +100,6 @@ class _CompassPainter extends CustomPainter {
       Paint()..color = arcColor,
     );
 
-    // Acceptable range border
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius - 4),
       arcStartAngle,
@@ -118,7 +113,6 @@ class _CompassPainter extends CustomPainter {
         ..strokeWidth = 2,
     );
 
-    // Correct bearing arrow
     _drawArrow(
       canvas,
       center,
@@ -129,7 +123,6 @@ class _CompassPainter extends CustomPainter {
       arrowSize: 12,
     );
 
-    // User bearing arrow
     _drawArrow(
       canvas,
       center,
@@ -140,20 +133,17 @@ class _CompassPainter extends CustomPainter {
       arrowSize: 10,
     );
 
-    // Cardinal directions N E S W
     _drawCardinalLabel(canvas, center, radius, 'С', 0);
     _drawCardinalLabel(canvas, center, radius, 'В', 90);
     _drawCardinalLabel(canvas, center, radius, 'Ю', 180);
     _drawCardinalLabel(canvas, center, radius, 'З', 270);
 
-    // Center dot
     canvas.drawCircle(
       center,
       5,
       Paint()..color = Colors.white.withValues(alpha: 0.8),
     );
 
-    // Legend
     _drawLegend(canvas, size);
   }
 
@@ -181,7 +171,6 @@ class _CompassPainter extends CustomPainter {
         ..strokeCap = StrokeCap.round,
     );
 
-    // Arrowhead
     final leftAngle = angle - pi * 0.7;
     final rightAngle = angle + pi * 0.7;
     final left = Offset(
@@ -192,8 +181,18 @@ class _CompassPainter extends CustomPainter {
       tip.dx + arrowSize * 0.6 * cos(rightAngle),
       tip.dy + arrowSize * 0.6 * sin(rightAngle),
     );
-    canvas.drawLine(tip, left, Paint()..color = color..strokeWidth = strokeWidth);
-    canvas.drawLine(tip, right, Paint()..color = color..strokeWidth = strokeWidth);
+    canvas.drawLine(
+        tip,
+        left,
+        Paint()
+          ..color = color
+          ..strokeWidth = strokeWidth);
+    canvas.drawLine(
+        tip,
+        right,
+        Paint()
+          ..color = color
+          ..strokeWidth = strokeWidth);
   }
 
   void _drawCardinalLabel(
@@ -236,7 +235,8 @@ class _CompassPainter extends CustomPainter {
       dotRadius,
       Paint()..color = const Color(0xFF69F0AE),
     );
-    _paintText(canvas, 'Верное направление', Offset(26, size.height - 34), textStyle);
+    _paintText(
+        canvas, 'Верное направление', Offset(26, size.height - 34), textStyle);
 
     // User direction legend
     canvas.drawCircle(
