@@ -39,12 +39,12 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
       _error = null;
     });
 
-    // Request location
     final pos = await LocationService.getCurrentPosition();
     if (pos == null && mounted) {
       setState(() {
         _loading = false;
-        _error = 'Не удалось получить геолокацию.\nПроверь разрешения приложения.';
+        _error =
+            'Не удалось получить геолокацию.\nПроверь разрешения приложения.';
       });
       return;
     }
@@ -151,7 +151,8 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                       : const Icon(Icons.play_arrow_rounded),
                   label: Text(
                     _loading ? 'Получаю геолокацию...' : 'Начать игру',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF00B4D8),
@@ -194,12 +195,14 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
       children: modes.map((m) {
         final selected = _settings.mode == m.$1;
         return GestureDetector(
-          onTap: () => setState(() => _settings = _settings.copyWith(mode: m.$1)),
+          onTap: () =>
+              setState(() => _settings = _settings.copyWith(mode: m.$1)),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: selected ? const Color(0xFF00B4D8) : const Color(0xFF1E2D3D),
+              color:
+                  selected ? const Color(0xFF00B4D8) : const Color(0xFF1E2D3D),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: selected
@@ -218,8 +221,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                   m.$2,
                   style: TextStyle(
                     color: selected ? Colors.black : Colors.white,
-                    fontWeight:
-                        selected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: selected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ],
@@ -360,7 +362,9 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
               width: 54,
               height: 44,
               decoration: BoxDecoration(
-                color: selected ? const Color(0xFF00B4D8) : const Color(0xFF1E2D3D),
+                color: selected
+                    ? const Color(0xFF00B4D8)
+                    : const Color(0xFF1E2D3D),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: selected
@@ -402,8 +406,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                 setState(() => _settings = _settings.copyWith(difficulty: d)),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: selected
                     ? color.withValues(alpha: 0.2)
