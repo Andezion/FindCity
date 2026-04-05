@@ -337,8 +337,6 @@ class _GameScreenState extends State<GameScreen>
       child: Column(
         children: [
           const SizedBox(height: 8),
-
-          // Result banner
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
@@ -389,8 +387,6 @@ class _GameScreenState extends State<GameScreen>
             ),
           ),
           const SizedBox(height: 16),
-
-          // Compass
           CompassResultWidget(
             userBearing: result.userBearing,
             correctBearing: result.correctBearing,
@@ -398,8 +394,6 @@ class _GameScreenState extends State<GameScreen>
             isCorrect: result.isCorrect,
           ),
           const SizedBox(height: 16),
-
-          // City info card
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -467,8 +461,6 @@ class _GameScreenState extends State<GameScreen>
             ),
           ),
           const SizedBox(height: 20),
-
-          // Next button
           SizedBox(
             width: double.infinity,
             height: 52,
