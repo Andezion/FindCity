@@ -1,9 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// A small live compass showing the phone's current heading during gameplay.
 class LiveCompassWidget extends StatelessWidget {
-  final double heading; // degrees, 0 = North
+  final double heading;
   final double size;
 
   const LiveCompassWidget({
@@ -34,7 +33,6 @@ class _LiveCompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 6;
 
-    // Background
     canvas.drawCircle(
       center,
       radius,
@@ -49,7 +47,6 @@ class _LiveCompassPainter extends CustomPainter {
         ..strokeWidth = 1.5,
     );
 
-    // North needle (red)
     final northAngle = (-heading - 90) * pi / 180;
     final northTip = Offset(
       center.dx + radius * 0.7 * cos(northAngle),
@@ -60,7 +57,6 @@ class _LiveCompassPainter extends CustomPainter {
       center.dy + radius * 0.4 * sin(northAngle + pi),
     );
 
-    // South half (white/gray)
     canvas.drawLine(
       center,
       southTip,
@@ -69,7 +65,6 @@ class _LiveCompassPainter extends CustomPainter {
         ..strokeWidth = 3
         ..strokeCap = StrokeCap.round,
     );
-    // North half (red)
     canvas.drawLine(
       center,
       northTip,
@@ -79,7 +74,6 @@ class _LiveCompassPainter extends CustomPainter {
         ..strokeCap = StrokeCap.round,
     );
 
-    // N label
     final tp = TextPainter(
       text: const TextSpan(
         text: 'С',
