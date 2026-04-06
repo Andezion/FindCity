@@ -12,13 +12,13 @@ class HomeScreen extends StatelessWidget {
         bottom: false,
         child: Column(
           children: [
-            const SizedBox(height: 28),
-            const Icon(Icons.explore, size: 56, color: Color(0xFF00B4D8)),
-            const SizedBox(height: 10),
+            const SizedBox(height: 14),
+            const Icon(Icons.explore, size: 48, color: Color(0xFF00B4D8)),
+            const SizedBox(height: 6),
             const Text(
               'CITY COMPASS',
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 letterSpacing: 4,
@@ -26,32 +26,37 @@ class HomeScreen extends StatelessWidget {
             ),
             const Text(
               'Укажи направление города',
-              style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
+              style: TextStyle(color: Color(0xFF607D8B), fontSize: 13),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Выбери регион',
                 style: TextStyle(
                   color: Color(0xFF90A4AE),
-                  fontSize: 13,
+                  fontSize: 12,
                   letterSpacing: 2,
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Expanded(
-              child: ListView.separated(
+              child: Padding(
                 padding: EdgeInsets.fromLTRB(
                   16,
                   0,
                   16,
-                  MediaQuery.of(context).padding.bottom + 16,
+                  MediaQuery.of(context).padding.bottom + 12,
                 ),
-                itemCount: GameRegion.values.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
-                itemBuilder: (_, i) => _RegionTile(region: GameRegion.values[i]),
+                child: Column(
+                  children: GameRegion.values
+                      .map((r) => Expanded(child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: _RegionTile(region: r),
+                          )))
+                      .toList(),
+                ),
               ),
             ),
           ],
@@ -80,7 +85,6 @@ class _RegionTile extends StatelessWidget {
         );
       },
       child: Container(
-        height: 68,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
