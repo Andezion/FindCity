@@ -7,6 +7,7 @@ import '../services/location_service.dart';
 import '../utils/geo_utils.dart';
 import '../widgets/compass_result_widget.dart';
 import '../widgets/live_compass_widget.dart';
+import '../widgets/manual_compass_widget.dart';
 import '../widgets/timer_widget.dart';
 import 'score_screen.dart';
 
@@ -28,6 +29,7 @@ class _GameScreenState extends State<GameScreen>
   StreamSubscription<double>? _compassSub;
   CardResult? _lastResult;
   bool _compassAvailable = false;
+  bool _isManualMode = false;
   late AnimationController _slideCtrl;
   late Animation<Offset> _slideAnim;
 
@@ -51,7 +53,7 @@ class _GameScreenState extends State<GameScreen>
     if (_compassAvailable) {
       SensorService.start();
       _compassSub = SensorService.headingStream.listen((h) {
-        if (_phase == _Phase.pointing) {
+        if (_phase == _Phase.pointing && !_isManualMode) {
           setState(() => _heading = h);
         }
       });
@@ -143,6 +145,7 @@ class _GameScreenState extends State<GameScreen>
     setState(() {
       _phase = _Phase.pointing;
       _timerKey++;
+      _isManualMode = false;
     });
     _slideCtrl.forward(from: 0);
   }
@@ -265,13 +268,29 @@ class _GameScreenState extends State<GameScreen>
               ),
             ),
             const SizedBox(height: 28),
-            if (_compassAvailable) ...[
-              LiveCompassWidget(heading: _heading, size: 140),
-              const SizedBox(height: 12),
+            if (_compassAvailable && !_isManualMode) ...[
+              LiveCompassWidget(heading: _heading, size: 150),
+              const SizedBox(height: 10),
               Text(
                 '${_heading.toStringAsFixed(0)}°',
                 style: const TextStyle(
                   color: Color(0xFF00B4D8),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFeatures: [FontFeature.tabularFigures()],
+                ),
+              ),
+            ] else if (_isManualMode) ...[
+              ManualCompassWidget(
+                initialHeading: _heading,
+                size: 210,
+                onChanged: (h) => setState(() => _heading = h),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                '${_heading.toStringAsFixed(0)}°',
+                style: const TextStyle(
+                  color: Color(0xFF00E5FF),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   fontFeatures: [FontFeature.tabularFigures()],
@@ -282,10 +301,44 @@ class _GameScreenState extends State<GameScreen>
                 'Компас недоступен на устройстве',
                 style: TextStyle(color: Color(0xFFFF9800)),
               ),
+            const SizedBox(height: 6),
+            Text(
+              _isManualMode
+                  ? 'Потяни стрелку в сторону города'
+                  : 'Держи горизонтально, верхом к городу',
+              style: const TextStyle(color: Color(0xFF90A4AE), fontSize: 13),
+            ),
             const SizedBox(height: 8),
-            const Text(
-              'Направь телефон в сторону города',
-              style: TextStyle(color: Color(0xFF90A4AE), fontSize: 13),
+            // Mode toggle
+            GestureDetector(
+              onTap: () => setState(() => _isManualMode = !_isManualMode),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E2D3D),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFF2E3F54)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _isManualMode ? Icons.explore : Icons.touch_app,
+                      size: 15,
+                      color: const Color(0xFF607D8B),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      _isManualMode ? 'Переключить на гироскоп' : 'Ввести вручную',
+                      style: const TextStyle(
+                        color: Color(0xFF607D8B),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const Spacer(),
             Row(
