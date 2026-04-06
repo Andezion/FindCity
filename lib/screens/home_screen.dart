@@ -9,15 +9,16 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
-            const SizedBox(height: 32),
-            const Icon(Icons.explore, size: 64, color: Color(0xFF00B4D8)),
-            const SizedBox(height: 12),
+            const SizedBox(height: 28),
+            const Icon(Icons.explore, size: 56, color: Color(0xFF00B4D8)),
+            const SizedBox(height: 10),
             const Text(
               'CITY COMPASS',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 letterSpacing: 4,
@@ -27,9 +28,9 @@ class HomeScreen extends StatelessWidget {
               'Укажи направление города',
               style: TextStyle(color: Color(0xFF607D8B), fontSize: 14),
             ),
-            const SizedBox(height: 36),
+            const SizedBox(height: 20),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Выбери регион',
                 style: TextStyle(
@@ -39,22 +40,20 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1.4,
-                  children: GameRegion.values
-                      .map((r) => _RegionTile(region: r))
-                      .toList(),
+              child: ListView.separated(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  0,
+                  16,
+                  MediaQuery.of(context).padding.bottom + 16,
                 ),
+                itemCount: GameRegion.values.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (_, i) => _RegionTile(region: GameRegion.values[i]),
               ),
             ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -81,38 +80,31 @@ class _RegionTile extends StatelessWidget {
         );
       },
       child: Container(
+        height: 68,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF1E2D3D),
-              const Color(0xFF0D1B2A),
-            ],
+            colors: [Color(0xFF1E2D3D), Color(0xFF0D1B2A)],
           ),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: const Color(0xFF2E3F54),
-            width: 1,
-          ),
+          border: Border.all(color: const Color(0xFF2E3F54), width: 1),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
           children: [
-            Text(
-              region.emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
-            const SizedBox(height: 6),
+            Text(region.emoji, style: const TextStyle(fontSize: 32)),
+            const SizedBox(width: 16),
             Text(
               region.label,
-              textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 13,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
             ),
+            const Spacer(),
+            const Icon(Icons.chevron_right, color: Color(0xFF2E3F54), size: 24),
           ],
         ),
       ),
