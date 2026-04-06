@@ -11,6 +11,9 @@ class SensorService {
   static bool _hasMag = false;
   static bool _hasAccel = false;
 
+  static double _smoothedHeading = 0;
+  static bool _initialized = false;
+
   static final _ctrl = StreamController<double>.broadcast();
 
   static Stream<double> get headingStream => _ctrl.stream;
@@ -44,13 +47,25 @@ class SensorService {
     _magnetSub?.cancel();
     _accelSub = null;
     _magnetSub = null;
+    _initialized = false;
   }
 
   static void _compute() {
     final h = _calcHeading();
-    if (h != null && !_ctrl.isClosed) {
-      _ctrl.add(h);
+    if (h == null || _ctrl.isClosed) return;
+
+    if (!_initialized) {
+      _smoothedHeading = h;
+      _initialized = true;
+    } else {
+      // Angular low-pass filter (alpha=0.18) — handles 0°/360° wrap correctly
+      double diff = h - _smoothedHeading;
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
+      _smoothedHeading = (_smoothedHeading + diff * 0.18 + 360) % 360;
     }
+
+    _ctrl.add(_smoothedHeading);
   }
 
   static double? _calcHeading() {
@@ -60,12 +75,15 @@ class SensorService {
     final roll = atan2(_ay, _az);
     final pitch = atan2(-_ax, sqrt(_ay * _ay + _az * _az));
 
+    // Tilt-compensated magnetometer components
     final bxh = _mx * cos(pitch) +
         _my * sin(roll) * sin(pitch) +
         _mz * cos(roll) * sin(pitch);
     final byh = _my * cos(roll) - _mz * sin(roll);
 
-    var heading = atan2(-byh, bxh) * 180 / pi;
+    // atan2(bxh, byh) — correct for horizontal phone where top faces the target.
+    // atan2(-byh, bxh) would be 90° off for face-up orientation.
+    var heading = atan2(bxh, byh) * 180 / pi;
     if (heading < 0) heading += 360;
     return heading;
   }
