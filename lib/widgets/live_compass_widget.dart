@@ -33,11 +33,8 @@ class _LiveCompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 6;
 
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()..color = const Color(0xFF1A2535),
-    );
+    // Background
+    canvas.drawCircle(center, radius, Paint()..color = const Color(0xFF1A2535));
     canvas.drawCircle(
       center,
       radius,
@@ -47,53 +44,92 @@ class _LiveCompassPainter extends CustomPainter {
         ..strokeWidth = 1.5,
     );
 
-    final northAngle = (-heading - 90) * pi / 180;
-    final northTip = Offset(
-      center.dx + radius * 0.7 * cos(northAngle),
-      center.dy + radius * 0.7 * sin(northAngle),
+    // Tick marks (fixed rose)
+    for (int i = 0; i < 36; i++) {
+      final angle = (i * 10 - 90) * pi / 180;
+      final isCardinal = i % 9 == 0;
+      final tickLen = isCardinal ? 10.0 : 4.0;
+      canvas.drawLine(
+        Offset(center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
+        Offset(center.dx + (radius - tickLen) * cos(angle),
+            center.dy + (radius - tickLen) * sin(angle)),
+        Paint()
+          ..color = const Color(0xFF4A6080)
+          ..strokeWidth = isCardinal ? 2 : 1,
+      );
+    }
+
+    // Fixed cardinal labels
+    _drawLabel(canvas, center, radius, 'С', 0);
+    _drawLabel(canvas, center, radius, 'В', 90);
+    _drawLabel(canvas, center, radius, 'Ю', 180);
+    _drawLabel(canvas, center, radius, 'З', 270);
+
+    // Single arrow: points where the top of the phone is aimed
+    // heading=0°→up, heading=90°→right, etc.
+    final arrowAngle = (heading - 90) * pi / 180;
+    final arrowLen = radius * 0.68;
+    final tailLen = radius * 0.22;
+
+    final tip = Offset(
+      center.dx + arrowLen * cos(arrowAngle),
+      center.dy + arrowLen * sin(arrowAngle),
     );
-    final southTip = Offset(
-      center.dx + radius * 0.4 * cos(northAngle + pi),
-      center.dy + radius * 0.4 * sin(northAngle + pi),
+    final tail = Offset(
+      center.dx + tailLen * cos(arrowAngle + pi),
+      center.dy + tailLen * sin(arrowAngle + pi),
     );
 
+    // Shaft
     canvas.drawLine(
-      center,
-      southTip,
+      tail,
+      tip,
       Paint()
-        ..color = const Color(0xFF607D8B)
-        ..strokeWidth = 3
-        ..strokeCap = StrokeCap.round,
-    );
-    canvas.drawLine(
-      center,
-      northTip,
-      Paint()
-        ..color = const Color(0xFFF44336)
-        ..strokeWidth = 3
+        ..color = const Color(0xFF00B4D8)
+        ..strokeWidth = 4
         ..strokeCap = StrokeCap.round,
     );
 
+    // Arrowhead wings
+    const headSize = 11.0;
+    for (final side in [-1.0, 1.0]) {
+      final wingAngle = arrowAngle + pi + side * 0.45;
+      canvas.drawLine(
+        tip,
+        Offset(
+          tip.dx + headSize * cos(wingAngle),
+          tip.dy + headSize * sin(wingAngle),
+        ),
+        Paint()
+          ..color = const Color(0xFF00B4D8)
+          ..strokeWidth = 4
+          ..strokeCap = StrokeCap.round,
+      );
+    }
+
+    // Center dot
+    canvas.drawCircle(center, 4, Paint()..color = Colors.white70);
+  }
+
+  void _drawLabel(
+      Canvas canvas, Offset center, double radius, String label, double bearing) {
+    final angle = (bearing - 90) * pi / 180;
+    final pos = Offset(
+      center.dx + (radius - 14) * cos(angle),
+      center.dy + (radius - 14) * sin(angle),
+    );
     final tp = TextPainter(
-      text: const TextSpan(
-        text: 'С',
-        style: TextStyle(
-          color: Color(0xFFF44336),
+      text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          color: Color(0xFF90A4AE),
           fontSize: 10,
           fontWeight: FontWeight.bold,
         ),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    tp.paint(
-      canvas,
-      Offset(
-        center.dx + (radius - 10) * cos(northAngle) - tp.width / 2,
-        center.dy + (radius - 10) * sin(northAngle) - tp.height / 2,
-      ),
-    );
-
-    canvas.drawCircle(center, 4, Paint()..color = Colors.white70);
+    tp.paint(canvas, Offset(pos.dx - tp.width / 2, pos.dy - tp.height / 2));
   }
 
   @override
