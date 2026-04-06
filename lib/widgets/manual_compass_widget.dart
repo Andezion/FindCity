@@ -105,7 +105,6 @@ class _ManualCompassPainter extends CustomPainter {
         ..strokeWidth = 20,
     );
 
-    // Arrow
     final arrowAngle = (heading - 90) * pi / 180;
     final arrowLen = radius * 0.72;
     final tailLen = radius * 0.22;
@@ -128,7 +127,6 @@ class _ManualCompassPainter extends CustomPainter {
         ..strokeCap = StrokeCap.round,
     );
 
-    // Arrowhead
     const headSize = 14.0;
     for (final side in [-1.0, 1.0]) {
       final wingAngle = arrowAngle + pi + side * 0.45;
@@ -145,7 +143,6 @@ class _ManualCompassPainter extends CustomPainter {
       );
     }
 
-    // Drag circle at tip
     canvas.drawCircle(
       tip,
       10,
@@ -160,7 +157,6 @@ class _ManualCompassPainter extends CustomPainter {
         ..strokeWidth = 2,
     );
 
-    // Center dot
     canvas.drawCircle(center, 5, Paint()..color = Colors.white70);
   }
 
