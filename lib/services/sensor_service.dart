@@ -58,7 +58,6 @@ class SensorService {
       _smoothedHeading = h;
       _initialized = true;
     } else {
-      // Angular low-pass filter (alpha=0.18) — handles 0°/360° wrap correctly
       double diff = h - _smoothedHeading;
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
@@ -75,14 +74,11 @@ class SensorService {
     final roll = atan2(_ay, _az);
     final pitch = atan2(-_ax, sqrt(_ay * _ay + _az * _az));
 
-    // Tilt-compensated magnetometer components
     final bxh = _mx * cos(pitch) +
         _my * sin(roll) * sin(pitch) +
         _mz * cos(roll) * sin(pitch);
     final byh = _my * cos(roll) - _mz * sin(roll);
 
-    // atan2(bxh, byh) — correct for horizontal phone where top faces the target.
-    // atan2(-byh, bxh) would be 90° off for face-up orientation.
     var heading = atan2(bxh, byh) * 180 / pi;
     if (heading < 0) heading += 360;
     return heading;
