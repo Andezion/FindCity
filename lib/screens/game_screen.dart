@@ -309,7 +309,6 @@ class _GameScreenState extends State<GameScreen>
               style: const TextStyle(color: Color(0xFF90A4AE), fontSize: 13),
             ),
             const SizedBox(height: 8),
-            // Mode toggle
             GestureDetector(
               onTap: () => setState(() => _isManualMode = !_isManualMode),
               child: Container(
@@ -330,7 +329,9 @@ class _GameScreenState extends State<GameScreen>
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      _isManualMode ? 'Переключить на гироскоп' : 'Ввести вручную',
+                      _isManualMode
+                          ? 'Переключить на гироскоп'
+                          : 'Ввести вручную',
                       style: const TextStyle(
                         color: Color(0xFF607D8B),
                         fontSize: 12,
