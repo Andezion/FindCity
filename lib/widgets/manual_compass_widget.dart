@@ -31,7 +31,6 @@ class _ManualCompassWidgetState extends State<ManualCompassWidget> {
     final delta = localPos - center;
     if (delta.distance < 12) return;
 
-    // canvas angle → compass bearing
     final angle = atan2(delta.dy, delta.dx) * 180 / pi;
     final heading = (angle + 90 + 360) % 360;
     setState(() => _heading = heading);
@@ -66,7 +65,6 @@ class _ManualCompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 8;
 
-    // Background
     canvas.drawCircle(center, radius, Paint()..color = const Color(0xFF1A2535));
     canvas.drawCircle(
       center,
@@ -77,28 +75,27 @@ class _ManualCompassPainter extends CustomPainter {
         ..strokeWidth = 2,
     );
 
-    // Tick marks
     for (int i = 0; i < 36; i++) {
       final angle = (i * 10 - 90) * pi / 180;
       final isCardinal = i % 9 == 0;
       final tickLen = isCardinal ? 14.0 : 6.0;
       canvas.drawLine(
-        Offset(center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
+        Offset(
+            center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
         Offset(center.dx + (radius - tickLen) * cos(angle),
             center.dy + (radius - tickLen) * sin(angle)),
         Paint()
-          ..color = isCardinal ? const Color(0xFF607D8B) : const Color(0xFF3A5068)
+          ..color =
+              isCardinal ? const Color(0xFF607D8B) : const Color(0xFF3A5068)
           ..strokeWidth = isCardinal ? 2 : 1,
       );
     }
 
-    // Cardinal labels
     _drawLabel(canvas, center, radius, 'С', 0);
     _drawLabel(canvas, center, radius, 'В', 90);
     _drawLabel(canvas, center, radius, 'Ю', 180);
     _drawLabel(canvas, center, radius, 'З', 270);
 
-    // Drag hint ring
     canvas.drawCircle(
       center,
       radius * 0.85,
@@ -167,8 +164,8 @@ class _ManualCompassPainter extends CustomPainter {
     canvas.drawCircle(center, 5, Paint()..color = Colors.white70);
   }
 
-  void _drawLabel(
-      Canvas canvas, Offset center, double radius, String label, double bearing) {
+  void _drawLabel(Canvas canvas, Offset center, double radius, String label,
+      double bearing) {
     final angle = (bearing - 90) * pi / 180;
     final pos = Offset(
       center.dx + (radius - 18) * cos(angle),
