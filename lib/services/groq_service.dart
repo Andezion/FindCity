@@ -57,7 +57,6 @@ Use accurate coordinates. Mix well-known and lesser-known cities.
     final data = jsonDecode(response.body);
     final content = data['choices'][0]['message']['content'] as String;
 
-    // Strip possible markdown code fences
     final cleaned = content
         .replaceAll(RegExp(r'```json\s*'), '')
         .replaceAll(RegExp(r'```\s*'), '')
