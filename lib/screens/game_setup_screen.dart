@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../config/groq_config.dart';
 import '../models/game_settings.dart';
 import '../models/game_session.dart';
 import '../services/cities_service.dart';
+import '../services/groq_service.dart';
 import '../services/location_service.dart';
 import 'game_screen.dart';
 
@@ -19,6 +21,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
   late GameSettings _settings;
   final _customCountController = TextEditingController(text: '10');
   bool _loading = false;
+  String? _loadingStatus;
   String? _error;
 
   @override
@@ -36,6 +39,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
   Future<void> _startGame() async {
     setState(() {
       _loading = true;
+      _loadingStatus = 'Получаю геолокацию...';
       _error = null;
     });
 
@@ -43,6 +47,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
     if (pos == null && mounted) {
       setState(() {
         _loading = false;
+        _loadingStatus = null;
         _error =
             'Не удалось получить геолокацию.\nПроверь разрешения приложения.';
       });
@@ -60,19 +65,42 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
       cardCount = _settings.cardCount;
     }
 
-    final cities = CitiesService.selectCities(
-      _settings.region,
-      count: _settings.mode == GameMode.infinite ? null : cardCount,
-    );
+    final fetchCount = _settings.mode == GameMode.infinite ? 50 : cardCount;
+
+    var cities = <dynamic>[];
+
+    if (GroqConfig.isConfigured) {
+      setState(() => _loadingStatus = 'Загружаю города через AI...');
+      try {
+        cities = await GroqService.fetchCities(
+          region: _settings.region,
+          count: fetchCount,
+        );
+      } catch (_) {
+        // fallback to static data
+        cities = CitiesService.selectCities(
+          _settings.region,
+          count: _settings.mode == GameMode.infinite ? null : cardCount,
+        );
+      }
+    } else {
+      cities = CitiesService.selectCities(
+        _settings.region,
+        count: _settings.mode == GameMode.infinite ? null : cardCount,
+      );
+    }
 
     if (!mounted) return;
 
     final session = GameSession(
       settings: _settings.copyWith(cardCount: cardCount),
-      cities: cities,
+      cities: List.from(cities),
     );
 
-    setState(() => _loading = false);
+    setState(() {
+      _loading = false;
+      _loadingStatus = null;
+    });
 
     Navigator.pushReplacement(
       context,
@@ -150,7 +178,7 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                         )
                       : const Icon(Icons.play_arrow_rounded),
                   label: Text(
-                    _loading ? 'Получаю геолокацию...' : 'Начать игру',
+                    _loading ? (_loadingStatus ?? 'Загрузка...') : 'Начать игру',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
