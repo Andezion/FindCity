@@ -1,12 +1,8 @@
 import 'dart:math';
 
-/// Pure Dart copy of GeoUtils from the main CityGame project.
-/// Kept intentionally in sync — if you change the formula here, update lib/utils/geo_utils.dart too.
 class GeoUtils {
   static const double earthRadiusKm = 6371.0;
 
-  /// Forward azimuth (bearing) from [fromLat,fromLng] to [toLat,toLng].
-  /// Returns degrees 0-360 (0 = North, 90 = East, 180 = South, 270 = West).
   static double calculateBearing(
     double fromLat,
     double fromLng,
@@ -24,7 +20,6 @@ class GeoUtils {
     return (bearing + 360) % 360;
   }
 
-  /// Haversine distance between two points, in km.
   static double calculateDistance(
     double lat1,
     double lng1,
@@ -44,7 +39,6 @@ class GeoUtils {
     return earthRadiusKm * c;
   }
 
-  /// Absolute angular difference between two bearings (0-180).
   static double bearingDifference(double b1, double b2) {
     double diff = ((b2 - b1) + 360) % 360;
     if (diff > 180) diff = 360 - diff;
