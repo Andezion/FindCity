@@ -79,7 +79,7 @@ class SensorService {
         _mz * cos(roll) * sin(pitch);
     final byh = _my * cos(roll) - _mz * sin(roll);
 
-    var heading = atan2(bxh, byh) * 180 / pi;
+    var heading = atan2(-byh, bxh) * 180 / pi;
     if (heading < 0) heading += 360;
     return heading;
   }
