@@ -77,7 +77,6 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
           count: fetchCount,
         );
       } catch (_) {
-        // fallback to static data
         cities = CitiesService.selectCities(
           _settings.region,
           count: _settings.mode == GameMode.infinite ? null : cardCount,
@@ -178,7 +177,9 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                         )
                       : const Icon(Icons.play_arrow_rounded),
                   label: Text(
-                    _loading ? (_loadingStatus ?? 'Загрузка...') : 'Начать игру',
+                    _loading
+                        ? (_loadingStatus ?? 'Загрузка...')
+                        : 'Начать игру',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
