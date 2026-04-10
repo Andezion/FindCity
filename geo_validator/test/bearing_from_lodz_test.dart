@@ -1,53 +1,43 @@
 import 'package:test/test.dart';
 import 'package:geo_validator/geo_utils.dart';
 
-/// Coordinates for Łódź — the player's "home" position used as reference.
 const double LODZ_LAT = 51.7592;
 const double LODZ_LNG = 19.4560;
 
-/// Tolerance in degrees for bearing assertions.
-/// ±1° catches formula regressions while allowing for floating-point noise.
 const double TOLERANCE = 1.0;
-
-/// Reference bearings are the values produced by the standard forward-azimuth
-/// (haversine) formula. They were captured from a passing run and cross-checked
-/// visually on a map to confirm the correct cardinal direction.
-///
-/// Format: (cityName, lat, lng, expectedBearing, cardinalDirection)
 const List<(String, double, double, double, String)> cities = [
-  // ── Europe ──────────────────────────────────────────────────────────────
-  //  City             lat       lng      bearing  direction
-  ('London',      51.5074,  -0.1278,   277.9,  'nearly due West'),
-  ('Paris',       48.8566,   2.3522,   261.8,  'W-SW'),
-  ('Berlin',      52.5200,  13.4050,   284.0,  'WNW'),
-  ('Madrid',      40.4168,  -3.7038,   243.6,  'SW'),
-  ('Rome',        41.9028,  12.4964,   208.4,  'SSW'),
-  ('Kyiv',        50.4501,  30.5234,    96.3,  'E'),
-  ('Warsaw',      52.2297,  21.0122,    63.2,  'ENE'),
-  ('Vienna',      48.2082,  16.3738,   210.4,  'SSW'),
-  ('Amsterdam',   52.3676,   4.9041,   279.6,  'W'),
-  ('Prague',      50.0755,  14.4378,   243.9,  'SW'),
-  ('Budapest',    47.4979,  19.0402,   185.5,  'S'),
-  ('Barcelona',   41.3851,   2.1734,   234.9,  'SW'),
-  ('Munich',      48.1351,  11.5820,   237.5,  'SW'),
-  ('Bucharest',   44.4268,  26.1025,   148.2,  'SE'),
-  ('Sofia',       42.6977,  23.3219,   162.4,  'SSE'),
-  ('Athens',      37.9838,  23.7275,   166.1,  'SSE'),
-  ('Stockholm',   59.3293,  18.0686,   354.6,  'N'),
-  ('Oslo',        59.9139,  10.7522,   333.0,  'NNW'),
-  ('Helsinki',    60.1699,  24.9384,    17.8,  'NNE'),
-  ('Copenhagen',  55.6761,  12.5683,   316.6,  'NW'),
-  ('Brussels',    50.8503,   4.3517,   270.4,  'W'),
-  ('Lisbon',      38.7223,  -9.1393,   248.0,  'WSW'),
-  ('Dublin',      53.3498,  -6.2603,   286.8,  'WNW'),
-  ('Zurich',      47.3769,   8.5417,   242.5,  'WSW'),
-  ('Minsk',       53.9045,  27.5615,    63.1,  'ENE'),
+  ('London', 51.5074, -0.1278, 277.9, 'nearly due West'),
+  ('Paris', 48.8566, 2.3522, 261.8, 'W-SW'),
+  ('Berlin', 52.5200, 13.4050, 284.0, 'WNW'),
+  ('Madrid', 40.4168, -3.7038, 243.6, 'SW'),
+  ('Rome', 41.9028, 12.4964, 208.4, 'SSW'),
+  ('Kyiv', 50.4501, 30.5234, 96.3, 'E'),
+  ('Warsaw', 52.2297, 21.0122, 63.2, 'ENE'),
+  ('Vienna', 48.2082, 16.3738, 210.4, 'SSW'),
+  ('Amsterdam', 52.3676, 4.9041, 279.6, 'W'),
+  ('Prague', 50.0755, 14.4378, 243.9, 'SW'),
+  ('Budapest', 47.4979, 19.0402, 185.5, 'S'),
+  ('Barcelona', 41.3851, 2.1734, 234.9, 'SW'),
+  ('Munich', 48.1351, 11.5820, 237.5, 'SW'),
+  ('Bucharest', 44.4268, 26.1025, 148.2, 'SE'),
+  ('Sofia', 42.6977, 23.3219, 162.4, 'SSE'),
+  ('Athens', 37.9838, 23.7275, 166.1, 'SSE'),
+  ('Stockholm', 59.3293, 18.0686, 354.6, 'N'),
+  ('Oslo', 59.9139, 10.7522, 333.0, 'NNW'),
+  ('Helsinki', 60.1699, 24.9384, 17.8, 'NNE'),
+  ('Copenhagen', 55.6761, 12.5683, 316.6, 'NW'),
+  ('Brussels', 50.8503, 4.3517, 270.4, 'W'),
+  ('Lisbon', 38.7223, -9.1393, 248.0, 'WSW'),
+  ('Dublin', 53.3498, -6.2603, 286.8, 'WNW'),
+  ('Zurich', 47.3769, 8.5417, 242.5, 'WSW'),
+  ('Minsk', 53.9045, 27.5615, 63.1, 'ENE'),
 ];
 
 void main() {
   group('GeoUtils.calculateBearing — from Łódź (51.7592°N, 19.456°E)', () {
     for (final (name, lat, lng, expected, direction) in cities) {
-      test('→ $name ($direction, expected ≈ ${expected.toStringAsFixed(1)}°)', () {
+      test('→ $name ($direction, expected ≈ ${expected.toStringAsFixed(1)}°)',
+          () {
         final actual = GeoUtils.calculateBearing(LODZ_LAT, LODZ_LNG, lat, lng);
         expect(
           actual,
@@ -73,7 +63,6 @@ void main() {
     });
 
     test('point due east gives bearing 90°', () {
-      // Same latitude, longitude strictly greater → due east
       final b = GeoUtils.calculateBearing(0.0, 0.0, 0.0, 10.0);
       expect(b, closeTo(90.0, TOLERANCE));
     });
@@ -102,7 +91,6 @@ void main() {
     });
 
     test('bearingDifference handles wrap-around across 0/360', () {
-      // 359° and 1° differ by 2°, not 358°
       expect(GeoUtils.bearingDifference(359, 1), closeTo(2.0, 0.001));
       expect(GeoUtils.bearingDifference(1, 359), closeTo(2.0, 0.001));
     });
@@ -110,23 +98,28 @@ void main() {
 
   group('GeoUtils.calculateDistance — basic sanity', () {
     test('Łódź → Warsaw is ~120 km', () {
-      final d = GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, 52.2297, 21.0122);
+      final d =
+          GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, 52.2297, 21.0122);
       expect(d, closeTo(120.0, 10.0));
     });
 
     test('Łódź → London is ~1350 km', () {
-      final d = GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, 51.5074, -0.1278);
+      final d =
+          GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, 51.5074, -0.1278);
       expect(d, closeTo(1350.0, 30.0));
     });
 
     test('distance is symmetric', () {
-      final d1 = GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, 52.2297, 21.0122);
-      final d2 = GeoUtils.calculateDistance(52.2297, 21.0122, LODZ_LAT, LODZ_LNG);
+      final d1 =
+          GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, 52.2297, 21.0122);
+      final d2 =
+          GeoUtils.calculateDistance(52.2297, 21.0122, LODZ_LAT, LODZ_LNG);
       expect(d1, closeTo(d2, 0.01));
     });
 
     test('distance to self is 0', () {
-      final d = GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, LODZ_LAT, LODZ_LNG);
+      final d =
+          GeoUtils.calculateDistance(LODZ_LAT, LODZ_LNG, LODZ_LAT, LODZ_LNG);
       expect(d, closeTo(0.0, 0.001));
     });
   });
