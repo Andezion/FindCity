@@ -1,0 +1,27 @@
+name: Geo Validator
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    name: Bearing tests (Dart)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dependencies
+        working-directory: geo_validator
+        run: dart pub get
+
+      - name: Run bearing tests
+        working-directory: geo_validator
+        run: dart test --reporter expanded
