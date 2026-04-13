@@ -33,7 +33,6 @@ class _LiveCompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 6;
 
-    // Background circle
     canvas.drawCircle(center, radius, Paint()..color = const Color(0xFF1A2535));
     canvas.drawCircle(
       center,
@@ -49,7 +48,6 @@ class _LiveCompassPainter extends CustomPainter {
     canvas.rotate(-heading * pi / 180);
     canvas.translate(-center.dx, -center.dy);
 
-    // Ticks (rotate with the rose)
     for (int i = 0; i < 36; i++) {
       final angle = (i * 10 - 90) * pi / 180;
       final isCardinal = i % 9 == 0;
