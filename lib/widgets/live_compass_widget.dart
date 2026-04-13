@@ -44,8 +44,6 @@ class _LiveCompassPainter extends CustomPainter {
         ..strokeWidth = 1.5,
     );
 
-    // Rotate canvas so the rose counter-rotates:
-    // N always points to actual North in the room.
     canvas.save();
     canvas.translate(center.dx, center.dy);
     canvas.rotate(-heading * pi / 180);
@@ -57,7 +55,8 @@ class _LiveCompassPainter extends CustomPainter {
       final isCardinal = i % 9 == 0;
       final tickLen = isCardinal ? 10.0 : 4.0;
       canvas.drawLine(
-        Offset(center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
+        Offset(
+            center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
         Offset(center.dx + (radius - tickLen) * cos(angle),
             center.dy + (radius - tickLen) * sin(angle)),
         Paint()
@@ -66,7 +65,6 @@ class _LiveCompassPainter extends CustomPainter {
       );
     }
 
-    // Cardinal direction labels (rotate with the rose)
     _drawLabel(canvas, center, radius, 'С', 0, const Color(0xFFFF5252));
     _drawLabel(canvas, center, radius, 'В', 90, const Color(0xFF90A4AE));
     _drawLabel(canvas, center, radius, 'Ю', 180, const Color(0xFF90A4AE));
@@ -74,8 +72,6 @@ class _LiveCompassPainter extends CustomPainter {
 
     canvas.restore();
 
-    // Fixed forward indicator — always at top, shows where phone is pointing.
-    // Triangle pointing inward at 12 o'clock.
     final tipY = center.dy - radius + 6;
     final triPath = Path()
       ..moveTo(center.dx, tipY + 10)
@@ -84,7 +80,6 @@ class _LiveCompassPainter extends CustomPainter {
       ..close();
     canvas.drawPath(triPath, Paint()..color = const Color(0xFF00B4D8));
 
-    // Center dot
     canvas.drawCircle(center, 4, Paint()..color = Colors.white70);
   }
 
