@@ -50,8 +50,6 @@ class _CompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 16;
 
-    // Rotate the whole compass so userBearing points up — matches how
-    // the live compass looked when the player held the phone toward the city.
     canvas.save();
     canvas.translate(center.dx, center.dy);
     canvas.rotate(-userBearing * pi / 180);
