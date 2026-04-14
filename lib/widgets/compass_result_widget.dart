@@ -149,7 +149,6 @@ class _CompassPainter extends CustomPainter {
       Paint()..color = Colors.white.withValues(alpha: 0.8),
     );
 
-    // Restore before drawing the legend so text stays upright.
     canvas.restore();
 
     _drawLegend(canvas, size);
