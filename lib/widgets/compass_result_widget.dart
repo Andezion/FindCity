@@ -50,6 +50,13 @@ class _CompassPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 16;
 
+    // Rotate the whole compass so userBearing points up — matches how
+    // the live compass looked when the player held the phone toward the city.
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(-userBearing * pi / 180);
+    canvas.translate(-center.dx, -center.dy);
+
     canvas.drawCircle(
       center,
       radius,
@@ -143,6 +150,9 @@ class _CompassPainter extends CustomPainter {
       5,
       Paint()..color = Colors.white.withValues(alpha: 0.8),
     );
+
+    // Restore before drawing the legend so text stays upright.
+    canvas.restore();
 
     _drawLegend(canvas, size);
   }
