@@ -2,6 +2,13 @@
 
 A new Flutter project.
 
+## Table of Contents
+- [General Info](#general-info)
+- [Demonstration](#demonstration)
+- [Technologies](#technologies)
+- [Future Plans](#future-plans)
+- [Setup](#setup)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
