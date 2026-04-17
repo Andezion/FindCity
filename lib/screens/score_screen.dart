@@ -38,7 +38,7 @@ class ScoreScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
               child: Column(
                 children: [
                   SizedBox(
@@ -101,6 +101,7 @@ class ScoreScreen extends StatelessWidget {
         const SizedBox(height: 8),
         Expanded(
           child: ListView.separated(
+            padding: const EdgeInsets.only(bottom: 8),
             itemCount: session.results.length,
             separatorBuilder: (_, __) => const SizedBox(height: 8),
             itemBuilder: (_, i) => _resultTile(session.results[i]),
@@ -184,6 +185,7 @@ class ScoreScreen extends StatelessWidget {
         const SizedBox(height: 8),
         Expanded(
           child: ListView.separated(
+            padding: const EdgeInsets.only(bottom: 8),
             itemCount: session.results.length,
             separatorBuilder: (_, __) => const SizedBox(height: 6),
             itemBuilder: (_, i) => _resultTile(
