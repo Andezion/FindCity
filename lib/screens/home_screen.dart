@@ -51,7 +51,8 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: GameRegion.values
-                      .map((r) => Expanded(child: Padding(
+                      .map((r) => Expanded(
+                              child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: _RegionTile(region: r),
                           )))
